@@ -1,0 +1,314 @@
+"","state","DisasterCategory","Year","frequency","TotalProjectCost"
+"1","AK","Biological",2020,9912,41524639731.12
+"2","AK","Natural Disasters",2018,260,550908918.51
+"3","AK","Natural Disasters",2020,80,198840758
+"4","AK","Natural Disasters",2022,21,4657999.96
+"5","AK","Natural Disasters",2023,200,136672835.7
+"6","AK","Severe Weather",2017,6,14973695.45
+"7","AK","Severe Weather",2021,30,11271873.05
+"8","AK","Severe Weather",2022,233,179107038.77
+"9","AL","Biological",2020,18425,10479737038.3801
+"10","AL","Severe Weather",2018,281,343045795.9
+"11","AL","Severe Weather",2019,595,153083151.63
+"12","AL","Severe Weather",2020,5689,6611041174.18004
+"13","AL","Severe Weather",2021,200,111276137.6
+"14","AL","Severe Weather",2023,779,410689305.680002
+"15","AR","Biological",2020,21128,24534609943.0406
+"16","AR","Natural Disasters",2019,1183,1369989510.04
+"17","AR","Severe Weather",2020,684,133334808.03
+"18","AR","Severe Weather",2023,512,354963986.37
+"19","AS","Biological",2020,80,111542189.55
+"20","AS","Severe Weather",2018,195,56512592.7
+"21","AS","Severe Weather",2022,6,2311362.5
+"22","AZ","Biological",2020,14437,40591450144.8805
+"23","AZ","Natural Disasters",2018,1,687414.97
+"24","AZ","Natural Disasters",2021,36,17928149.19
+"25","AZ","Natural Disasters",2022,1,977584.55
+"26","AZ","Severe Weather",2018,2,9279725.62
+"27","AZ","Severe Weather",2019,1,738255.83
+"28","AZ","Severe Weather",2022,1,1071802.89
+"29","AZ","Severe Weather",2023,2,161300.38
+"30","CA","Biological",2020,140418,856241211073.075
+"31","CA","Natural Disasters",2017,1650,6564954288.69
+"32","CA","Natural Disasters",2018,410,7720113404.38001
+"33","CA","Natural Disasters",2020,3660,15740334625.08
+"34","CA","Natural Disasters",2021,378,2354095193.98
+"35","CA","Natural Disasters",2022,28293,20447444395.3403
+"36","CA","Severe Weather",2019,2576,1834274176.19
+"37","CA","Severe Weather",2023,17836,31969649381.3701
+"38","CO","Biological",2020,21186,145479373073.101
+"39","CO","Natural Disasters",2020,48,95711589.9
+"40","CO","Natural Disasters",2021,21,58074826.39
+"41","CO","Natural Disasters",2023,588,195608589.96
+"42","CT","Biological",2020,4896,11628629110.32
+"43","CT","Severe Weather",2018,100,63094879.96
+"44","CT","Severe Weather",2020,1490,424126333.1
+"45","CT","Severe Weather",2021,290,96532500.1300002
+"46","DC","Biological",2020,69,1050413359.2
+"47","DC","Others",2021,11,6227456.2
+"48","DE","Biological",2020,237,840130697.04
+"49","DE","Severe Weather",2020,54,7557298.38
+"50","DE","Severe Weather",2021,24,6122020.51
+"51","FL","Biological",2020,70847,342585150019.147
+"52","FL","Natural Disasters",2023,20,123173472.9
+"53","FL","Others",2021,9,97412030.33
+"54","FL","Severe Weather",2017,81561,183589697557.907
+"55","FL","Severe Weather",2018,5418,46594212326.1
+"56","FL","Severe Weather",2019,2674,1806578145.68001
+"57","FL","Severe Weather",2020,2741,3189301899.01002
+"58","FL","Severe Weather",2021,980,88680033.35
+"59","FL","Severe Weather",2022,87715,189579416606.734
+"60","FL","Severe Weather",2023,15435,41785829609.6501
+"61","GA","Biological",2020,68640,182044341961.601
+"62","GA","Severe Weather",2016,2440,2314846497.19999
+"63","GA","Severe Weather",2017,81539,25772314453.0808
+"64","GA","Severe Weather",2018,14835,13016790279.81
+"65","GA","Severe Weather",2020,945,360641707.44
+"66","GA","Severe Weather",2021,198,313394828.04
+"67","GA","Severe Weather",2023,3003,1910300803.07
+"68","GU","Biological",2020,28,61357125.22
+"69","GU","Severe Weather",2018,25,11166518.57
+"70","GU","Severe Weather",2019,13,981221.63
+"71","GU","Severe Weather",2023,144,84879682.52
+"72","HI","Biological",2020,650,1745788788.65
+"73","HI","Natural Disasters",2018,100,207021258.88
+"74","HI","Natural Disasters",2021,10,7916607.91
+"75","HI","Natural Disasters",2023,150,683144216.26
+"76","HI","Severe Weather",2018,84,84509665.38
+"77","HI","Severe Weather",2020,31,3695184.02
+"78","HI","Severe Weather",2021,36,14730564.32
+"79","IA","Biological",2020,71913,60899993390.5874
+"80","IA","Natural Disasters",2019,34561,19658296119.9701
+"81","IA","Natural Disasters",2023,161,17145629.62
+"82","IA","Severe Weather",2018,3803,748109731.789999
+"83","IA","Severe Weather",2020,6096,5157851558.44
+"84","IA","Severe Weather",2021,1175,142275713.75
+"85","ID","Biological",2020,13034,12899908482.09
+"86","ID","Natural Disasters",2019,144,14005842.96
+"87","ID","Severe Weather",2021,124,63522549.4
+"88","IL","Biological",2020,180234,213775762632.237
+"89","IL","Natural Disasters",2019,10976,2473255555.11999
+"90","IL","Severe Weather",2021,98,3909050.32
+"91","IL","Severe Weather",2023,2970,354725467.359999
+"92","IN","Biological",2020,113181,34840773617.3404
+"93","IN","Natural Disasters",2018,4433,558235509.479998
+"94","IN","Severe Weather",2023,559,213848291.02
+"95","KS","Biological",2020,37877,69042865737.2303
+"96","KS","Severe Weather",2017,40,14888903.28
+"97","KS","Severe Weather",2018,1656,112764171.16
+"98","KS","Severe Weather",2019,39550,5849797608.20001
+"99","KS","Severe Weather",2021,8415,1350799619.94999
+"100","KS","Severe Weather",2022,160,411753006.6
+"101","KS","Severe Weather",2023,1008,274284437.28
+"102","KY","Biological",2020,106080,35622538039.2008
+"103","KY","Natural Disasters",2018,3615,2054157938.04
+"104","KY","Natural Disasters",2021,4550,5031125370.49999
+"105","KY","Natural Disasters",2022,4680,6298591619.59999
+"106","KY","Natural Disasters",2023,946,397144275.44
+"107","KY","Severe Weather",2019,6893,6214073203.10997
+"108","KY","Severe Weather",2020,1485,2139864957.36
+"109","KY","Severe Weather",2021,7085,7976449505.91996
+"110","KY","Severe Weather",2023,11704,2899041841.51995
+"111","LA","Biological",2020,40187,192286423110.53
+"112","LA","Natural Disasters",2019,711,389883790.66
+"113","LA","Natural Disasters",2021,154,89057863.37
+"114","LA","Others",2023,145,166500000
+"115","LA","Severe Weather",2017,2152,319170404.880001
+"116","LA","Severe Weather",2019,4410,1866842436.00999
+"117","LA","Severe Weather",2020,62700,219501046570.994
+"118","LA","Severe Weather",2021,50752,197234852116.465
+"119","MA","Biological",2020,14911,61504289254.7196
+"120","MA","Severe Weather",2018,1688,576694363.670001
+"121","MA","Severe Weather",2022,430,163841689.8
+"122","MA","Severe Weather",2023,56,0
+"123","MD","Biological",2020,10392,58687985382.4803
+"124","MD","Natural Disasters",2018,48,44697422.46
+"125","MD","Severe Weather",2018,44,20094456.1
+"126","MD","Severe Weather",2020,39,46251220.77
+"127","ME","Biological",2020,160810,262472562444.074
+"128","ME","Natural Disasters",2023,835,128047573.87
+"129","ME","Severe Weather",2017,3068,140621159.12
+"130","ME","Severe Weather",2018,11,9325639.32
+"131","ME","Severe Weather",2021,78,22669556.16
+"132","ME","Severe Weather",2022,444,27119515.14
+"133","ME","Severe Weather",2023,668,449932
+"134","MI","Biological",2020,85540,138995992179.78
+"135","MI","Natural Disasters",2018,90,133002667.62
+"136","MI","Natural Disasters",2020,295,178629368.95
+"137","MI","Severe Weather",2021,120,243101001.6
+"138","MN","Biological",2020,50506,61278099878.9199
+"139","MN","Natural Disasters",2018,10449,948734437.339993
+"140","MN","Natural Disasters",2019,40920,5936452758.5
+"141","MN","Natural Disasters",2022,4731,543362707.749998
+"142","MN","Natural Disasters",2023,6630,323859189.679998
+"143","MN","Severe Weather",2022,6463,594311827.64
+"144","MO","Biological",2020,97520,158288490849.404
+"145","MO","Natural Disasters",2017,13805,6474350556.30001
+"146","MO","Natural Disasters",2019,2080,593995612.8
+"147","MO","Natural Disasters",2022,220,137662484.24
+"148","MO","Severe Weather",2019,44544,9107349871.41031
+"149","MO","Severe Weather",2020,494,183444923.43
+"150","MO","Severe Weather",2021,2366,464982455.910002
+"151","MO","Severe Weather",2023,2805,781563385.350001
+"152","MP","Biological",2020,80,659470409.6
+"153","MP","Severe Weather",2018,195,1253725025.44
+"154","MP","Severe Weather",2023,27,5800361.55
+"155","MS","Biological",2020,43575,32502809855.4191
+"156","MS","Others",2022,15,8179343.32
+"157","MS","Severe Weather",2017,186,87722064.48
+"158","MS","Severe Weather",2018,341,90320074.46
+"159","MS","Severe Weather",2019,3383,1794108455.65002
+"160","MS","Severe Weather",2020,4179,2571616101.03
+"161","MS","Severe Weather",2021,12388,3591078290.81995
+"162","MS","Severe Weather",2023,1243,1487850326.24
+"163","MT","Biological",2020,12801,5096451911.67999
+"164","MT","Natural Disasters",2018,208,37142237.03
+"165","MT","Natural Disasters",2019,80,11275092.16
+"166","MT","Natural Disasters",2021,8,11146054.56
+"167","MT","Natural Disasters",2022,245,366843472.38
+"168","MT","Natural Disasters",2023,196,47426936.9
+"169","MT","Others",2021,20,20873512.95
+"170","NC","Biological",2020,83210,260996325431.203
+"171","NC","Severe Weather",2018,30466,55581464656.13
+"172","NC","Severe Weather",2019,4480,2689291795.96001
+"173","NC","Severe Weather",2020,3700,1634614672.35001
+"174","NC","Severe Weather",2021,462,438378998.53
+"175","NC","Severe Weather",2022,3535,238223974.21
+"176","ND","Biological",2020,9397,11534088273.94
+"177","ND","Natural Disasters",2017,264,74339623.38
+"178","ND","Natural Disasters",2019,1648,465865025.38
+"179","ND","Natural Disasters",2020,1000,233982481.2
+"180","ND","Natural Disasters",2023,756,123166590.12
+"181","ND","Severe Weather",2020,60,16998982.02
+"182","ND","Severe Weather",2021,108,26920463.94
+"183","ND","Severe Weather",2022,4013,3466563185.74998
+"184","NE","Biological",2020,45758,39544049965.1507
+"185","NE","Natural Disasters",2019,45748,52260110022.6894
+"186","NE","Severe Weather",2018,1006,344851298.819999
+"187","NE","Severe Weather",2021,814,692189003.620001
+"188","NE","Severe Weather",2022,400,281908661.4
+"189","NH","Biological",2020,3340,3286403307.50001
+"190","NH","Natural Disasters",2021,50,24811358.72
+"191","NH","Natural Disasters",2023,357,118683151.16
+"192","NH","Severe Weather",2017,630,106383148.86
+"193","NH","Severe Weather",2018,179,12399913.38
+"194","NH","Severe Weather",2019,13,4775099.88
+"195","NH","Severe Weather",2021,16,2478346.42
+"196","NH","Severe Weather",2022,168,14119311.44
+"197","NJ","Biological",2020,39905,77912168708.9203
+"198","NJ","Severe Weather",2018,1596,245321972.7
+"199","NJ","Severe Weather",2020,3135,507163522.469999
+"200","NJ","Severe Weather",2021,12254,7112483181.06004
+"201","NJ","Severe Weather",2023,27,10121082.73
+"202","NM","Biological",2020,13599,33861861187.2699
+"203","NM","Natural Disasters",2017,1,16328848.61
+"204","NM","Natural Disasters",2022,546,1955612662.99
+"205","NV","Biological",2020,3960,8283566151.96002
+"206","NV","Natural Disasters",2023,84,82413542.52
+"207","NY","Biological",2020,144642,997301135419.16
+"208","NY","Natural Disasters",2017,640,270306437.84
+"209","NY","Natural Disasters",2018,546,285229446.25
+"210","NY","Natural Disasters",2023,72,0
+"211","NY","Severe Weather",2019,3510,1992868204.14
+"212","NY","Severe Weather",2020,1484,3168054144.57
+"213","NY","Severe Weather",2021,5104,5316527634.77
+"214","NY","Severe Weather",2022,2935,242965560.43
+"215","NY","Severe Weather",2023,873,453984042.87
+"216","OH","Biological",2020,74800,84783124669.7621
+"217","OH","Natural Disasters",2018,5456,1384922860.64001
+"218","OH","Natural Disasters",2019,3822,1423721199.80999
+"219","OH","Severe Weather",2019,516,187886174.76
+"220","OK","Biological",2020,38199,37642569218.8506
+"221","OK","Natural Disasters",2018,70,34673878.6
+"222","OK","Severe Weather",2019,11514,4891441654.96005
+"223","OK","Severe Weather",2020,3567,3704793463.45999
+"224","OK","Severe Weather",2021,20328,320959768.359998
+"225","OK","Severe Weather",2022,2,1230246.94
+"226","OK","Severe Weather",2023,2107,2265127099.81
+"227","OR","Biological",2020,21103,83180818247.32
+"228","OR","Natural Disasters",2019,210,85293598.74
+"229","OR","Natural Disasters",2020,3380,12413399378.48
+"230","OR","Natural Disasters",2023,1,132990.55
+"231","OR","Severe Weather",2019,320,201624348.3
+"232","OR","Severe Weather",2021,420,200981926.6
+"233","PA","Biological",2020,69144,132865953817.19
+"234","PA","Severe Weather",2018,2211,1218712059.51
+"235","PA","Severe Weather",2021,3809,1552592359.89
+"236","PR","Biological",2020,26676,15051078931.1998
+"237","PR","Natural Disasters",2019,3672,35833790737.1198
+"238","PR","Severe Weather",2017,77024,2981467762242.67
+"239","PR","Severe Weather",2020,2964,0
+"240","PR","Severe Weather",2022,25272,98343364009.799
+"241","RI","Biological",2020,1002,5736105651.25
+"242","RI","Severe Weather",2022,492,73936809.78
+"243","SC","Biological",2020,13301,32706754073.3803
+"244","SC","Severe Weather",2017,8272,2068126608.12997
+"245","SC","Severe Weather",2018,2907,2623065109.41001
+"246","SC","Severe Weather",2019,1344,685048344.479998
+"247","SC","Severe Weather",2020,680,296287079.999999
+"248","SC","Severe Weather",2022,7636,1329791879.05999
+"249","SC","Severe Weather",2023,2346,179868479.64
+"250","SD","Biological",2020,13251,8321409722.79001
+"251","SD","Natural Disasters",2019,53407,5291278466.35991
+"252","SD","Natural Disasters",2023,1001,81963890.6900001
+"253","SD","Severe Weather",2019,5647,696799716.329995
+"254","SD","Severe Weather",2022,2502,405161612.829998
+"255","TN","Biological",2020,36575,57090122021.7003
+"256","TN","Natural Disasters",2019,10679,1703165000.01004
+"257","TN","Natural Disasters",2021,132,224434661.84
+"258","TN","Severe Weather",2019,360,180256958.1
+"259","TN","Severe Weather",2020,1582,1750218477.2
+"260","TN","Severe Weather",2021,3206,1112400957.41
+"261","TN","Severe Weather",2022,746,565800726.53
+"262","TN","Severe Weather",2023,3857,2202736262.79
+"263","TX","Biological",2020,416855,4094780248110.53
+"264","TX","Natural Disasters",2018,3816,2791376570.52001
+"265","TX","Severe Weather",2017,68052,189046181508.704
+"266","TX","Severe Weather",2020,9273,4445298481.86001
+"267","TX","Severe Weather",2021,239268,30131795690.0569
+"268","TX","Severe Weather",2023,2024,981736937.64
+"269","UT","Biological",2020,3780,16115558743.8
+"270","UT","Natural Disasters",2020,48,53595853.32
+"271","UT","Natural Disasters",2023,65,64816.1
+"272","UT","Severe Weather",2020,204,43992564.4
+"273","VA","Biological",2020,54372,152106449011.385
+"274","VA","Natural Disasters",2021,7,1888714.38
+"275","VA","Severe Weather",2018,4464,3181870023.84
+"276","VA","Severe Weather",2021,1551,2413779012.81
+"277","VA","Severe Weather",2022,926,4115967145.94001
+"278","VI","Biological",2020,234,485738533.95
+"279","VI","Others",2022,5,437919.35
+"280","VI","Others",2023,11,1899832.31
+"281","VI","Severe Weather",2017,1398,37412943737.94
+"282","VI","Severe Weather",2020,3,0
+"283","VT","Biological",2020,3794,7068390688.66
+"284","VT","Natural Disasters",2019,318,69614887.74
+"285","VT","Natural Disasters",2021,44,16597109.1
+"286","VT","Natural Disasters",2023,3178,1656407179.89
+"287","VT","Severe Weather",2017,826,168205096.72
+"288","VT","Severe Weather",2018,60,21875840.35
+"289","VT","Severe Weather",2019,528,218432229.12
+"290","VT","Severe Weather",2022,136,36261847.2
+"291","WA","Biological",2020,56147,171096580116.136
+"292","WA","Natural Disasters",2018,1,613372.24
+"293","WA","Natural Disasters",2020,1809,1604873664.69
+"294","WA","Natural Disasters",2021,2281,1116534416.86
+"295","WA","Severe Weather",2018,312,117555795.44
+"296","WA","Severe Weather",2020,936,446665211.279999
+"297","WA","Severe Weather",2022,261,65099060.46
+"298","WI","Biological",2020,45612,75884277297.3593
+"299","WI","Natural Disasters",2018,3476,805412868.559999
+"300","WI","Natural Disasters",2019,3340,469621368
+"301","WI","Natural Disasters",2020,54,17734709.43
+"302","WI","Severe Weather",2017,1793,126171370.49
+"303","WV","Biological",2020,7095,10760130403.0001
+"304","WV","Natural Disasters",2018,945,1185819074.37
+"305","WV","Natural Disasters",2019,80,30836125.2
+"306","WV","Natural Disasters",2021,189,55457483.2
+"307","WV","Natural Disasters",2022,6,3848014.41
+"308","WV","Severe Weather",2018,133,22729184.03
+"309","WV","Severe Weather",2021,125,32313077.15
+"310","WV","Severe Weather",2022,14,4452780.27
+"311","WY","Biological",2020,1104,2024437756.8
+"312","WY","Natural Disasters",2017,39,21273554.76
+"313","WY","Natural Disasters",2023,6,601560.21

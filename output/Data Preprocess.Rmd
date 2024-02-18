@@ -38,16 +38,22 @@ Install shiny
 ```{r}
 if (!require("shiny")) install.packages("shiny")
 library(shiny)
-runExample("01_hello")
+if (!require("shinydashboard")) install.packages("shinydashboard")
+library(shinydashboard)
+if (!require("leaflet")) install.packages("leaflet")
+library(leaflet)
+if (!require("scales")) install.packages("scales")
+library(scales)
+#runExample("01_hello")
 ```
 
 
 Load Data
 
 ```{r read data}
-v1 <- read.csv("E:/GR 5243/FemaWebDisasterDeclarations.csv")
-v2 <- read.csv("E:/GR 5243/DisasterDeclarationsSummaries.csv")
-v3 <- read.csv("E:/GR 5243/PublicAssistanceApplicantsProgramDeliveries.csv")
+v1 <- read.csv("~/ADS-Spring2024-Project2-ShinyApp-Group4/data/FemaWebDisasterDeclarations.csv")
+v2 <- read.csv("~/ADS-Spring2024-Project2-ShinyApp-Group4/data/DisasterDeclarationsSummaries.csv")
+v3 <- read.csv("~/ADS-Spring2024-Project2-ShinyApp-Group4/data/PublicAssistanceApplicantsProgramDeliveries.csv")
 
 ```
 
@@ -239,55 +245,101 @@ plot(forecast(arima_model), main = "ARIMA Model Forecast")
 ```
 
 ```{r}
-#may not be used 
-install.packages("leaflet")
+unique(disaster_counts$DisasterCategory)
+```
 
-library(shiny)
-library(leaflet)
-library(ggplot2)
-library(dplyr)
+```{r}
+# combine disaster cost and count for each state each year
+state_location <- read.csv("~/ADS-Spring2024-Project2-ShinyApp-Group4/data/UsStateLocation.csv")
 
+combined_disaster <- inner_join(disaster_counts, disaster_costs, by = c("state"="stateCode", "Year", "DisasterCategory"))
+
+head(combined_disaster)
+
+write.csv(combined_disaster, "~/ADS-Spring2024-Project2-ShinyApp-Group4/data/DisasterFinal.csv")
+```
+
+```{r}
 ui <- fluidPage(
-  titlePanel("Disaster Analysis Dashboard"),
+  titlePanel("US Disaster Analysis"),
   sidebarLayout(
     sidebarPanel(
-      selectInput("disasterType", "Choose a Disaster Type:", choices = unique(combined$incidentType)),
-      dateRangeInput("dateRange", "Select Date Range:", start = min(combined$incidentBeginDate), end = max(combined$incidentEndDate)),
-      # Add any other inputs you need
+      selectInput("state", "State", choices = unique(combined_disaster$state)),
+      selectInput("year", "Year", choices = unique(combined_disaster$Year)),
+      selectInput("category", "Disaster Category", choices = unique(combined_disaster$DisasterCategory)),
+      radioButtons("displayMetric", "Display Metric:",
+                   choices = list("Disaster Count" = "frequency", "Total Project Cost" = "TotalProjectCost")),
+      actionButton("update", "Update")
     ),
     mainPanel(
-      tabsetPanel(
-        tabPanel("Map", leafletOutput("disasterMap")),
-        tabPanel("Trend", plotOutput("trendPlot")),
-        # Add any other panels you need
-      )
+      leafletOutput("map"),
+      textOutput("stats")
     )
   )
 )
 
 server <- function(input, output, session) {
-  # Reactive expression to filter data based on inputs
-  filtered_data <- reactive({
-    combined %>%
-      filter(incidentType == input$disasterType,
-             incidentBeginDate >= input$dateRange[1],
-             incidentEndDate <= input$dateRange[2])
+  
+  data_filtered <- reactive({
+    req(input$state, input$year, input$category) # Ensure values are selected
+    combined_disaster %>%
+      filter(state == input$state, year == input$year, category == input$category)
   })
   
-  # Map output
-  output$disasterMap <- renderLeaflet({
-    # Use your filtered_data() to create the map
+  # Render the map output
+  output$map <- renderLeaflet({
+    # Initial map: centered on the US
+    leaflet() %>%
+      addProviderTiles(providers$Esri.WorldStreetMap) %>% # Using a basic map layer
+      setView(lng = -98.583333, lat = 39.833333, zoom = 4) # Coordinates for the US center
   })
   
-  # Trend plot output
-  output$trendPlot <- renderPlot({
-    # Use your filtered_data() to create the plot
+  # Update the map based on selections
+  observe({
+    req(input$state) # Ensure a state is selected
+    state_loc <- state_location %>% filter(state == input$state)
+    
+    # If state location is found, update the map
+    if(nrow(state_loc) > 0) {
+      leafletProxy("map", data = state_loc) %>%
+        clearMarkers() %>% # Remove existing markers
+        addMarkers(lng = state_loc$longitude, lat = state_loc$latitude, popup = input$state) %>%
+        setView(lng = state_loc$longitude, lat = state_loc$latitude, zoom = 6)
+    }
   })
   
-  # Add any other output components you need
+  observe({
+    data <- data_filtered() # Get the filtered data
+    
+    # Determine circle sizes based on the display metric
+    sizes <- if(input$displayMetric == "frequency") {
+      sqrt(data$frequency) * 1000 # Adjust the multiplier as needed for visual distinction
+    } else {
+      sqrt(data$TotalProjectCost / 1e6) * 100 # Adjust divisor and multiplier as needed
+    }
+    
+    # Update the map with circles for each disaster category
+    leafletProxy("map", data = data) %>%
+      clearShapes() %>% # Clear existing shapes
+      addCircles(lng = ~longitude, lat = ~latitude, radius = ~sizes,
+                 popup = ~paste(DisasterCategory, "in", Year, ": ", input$displayMetric, "=", sizes),
+                 fillColor = ~ifelse(DisasterCategory == "Natural Disasters", "red", "blue"),
+                 color = "#000000", fillOpacity = 0.5)
+  })
+  
+  # Render the stats output
+  output$stats <- renderText({
+    data <- data_filtered()
+    if(is.null(data) || nrow(data()) == 0) {
+      return("No data available for the selected options.")
+    }
+    count <- nrow(data())
+    total_cost <- sum(data()$project_cost, na.rm = TRUE)
+    
+    paste("Disaster Count:", count, "Total Project Cost:", formatC(total_cost, format = "f", big.mark = ","))
+  })
 }
 
-# Run the app
 shinyApp(ui, server)
 ```
 
