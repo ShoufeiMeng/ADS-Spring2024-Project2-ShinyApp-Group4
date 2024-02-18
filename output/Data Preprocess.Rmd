@@ -262,7 +262,7 @@ write.csv(combined_disaster, "~/ADS-Spring2024-Project2-ShinyApp-Group4/data/Dis
 ```{r}
 merged_data <- merge(combined_disaster, state_location, by = "state")
 
-# Define UI
+# UI
 ui <- fluidPage(
   titlePanel("US Disaster Data (2016 - 2023)"),
   sidebarLayout(
@@ -270,7 +270,7 @@ ui <- fluidPage(
       sliderInput("year", "Year",
                   min = min(merged_data$Year),
                   max = max(merged_data$Year),
-                  value = min(merged_data$Year),
+                  value = min(merged_data$Year), # set initial value to be the minimum year
                   step = 1),
       selectInput("dataToShow", "Data to Show",
                   choices = c("Frequency" = "frequency", "Total Project Cost" = "TotalProjectCost"))
@@ -292,11 +292,11 @@ server <- function(input, output) {
     colors <- colorFactor(rainbow(length(unique(data$DisasterCategory))), data$DisasterCategory)
     
     leaflet(data) %>%
-      addTiles() %>%  # Add default OpenStreetMap map tiles
-      setView(lng = -98.5795, lat = 39.8283, zoom = 4) %>%
+      addTiles() %>%
+      setView(lng = -98.5795, lat = 39.8283, zoom = 4) %>% # set default view
       addCircles(
         lng = ~longitude, lat = ~latitude, 
-        radius = ~sqrt(frequency) * 1000,  # Adjust the multiplier as needed to scale circle sizes appropriately
+        radius = ~sqrt(frequency) * 1000, # Adjust point size according to the frequency
         color = ~colors(DisasterCategory),
         popup = ~paste(name, "<br>", "Disaster Category:", DisasterCategory, "<br>", "Frequency:", frequency),
         fillColor = ~colors(DisasterCategory),
