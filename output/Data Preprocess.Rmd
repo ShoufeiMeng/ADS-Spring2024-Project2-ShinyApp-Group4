@@ -286,6 +286,17 @@ server <- function(input, output, session) {
       filter(state == input$state, year == input$year, category == input$category)
   })
   
+  data_filtered <- eventReactive(input$update, {
+    tryCatch({
+      req(input$state, input$year, input$category)  # Ensure inputs are not NULL
+      # Your filtering logic here...
+    }, error = function(e) {
+      # Handle error, e.g., return an empty data frame or a special value
+      print(e)  # Print the error for debugging
+      data.frame()  # Return an empty data frame as a placeholder
+    })
+  })
+    
   # Render the map output
   output$map <- renderLeaflet({
     # Initial map: centered on the US
@@ -329,14 +340,17 @@ server <- function(input, output, session) {
   
   # Render the stats output
   output$stats <- renderText({
-    data <- data_filtered()
-    if(is.null(data) || nrow(data()) == 0) {
+    req(data_filtered())
+    if(is.null(data) || nrow(data) == 0) {
       return("No data available for the selected options.")
     }
-    count <- nrow(data())
-    total_cost <- sum(data()$project_cost, na.rm = TRUE)
-    
-    paste("Disaster Count:", count, "Total Project Cost:", formatC(total_cost, format = "f", big.mark = ","))
+    metric <- if(input$displayMetric == "frequency") "Disaster Count:" else "Total Project Cost:"
+    value <- if(input$displayMetric == "frequency") {
+      sum(data$frequency, na.rm = TRUE)
+    } else {
+      sum(data$TotalProjectCost, na.rm = TRUE)
+    }
+    paste(metric, formatC(value, format = "f", big.mark = ","))
   })
 }
 
