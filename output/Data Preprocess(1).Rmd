@@ -1,0 +1,293 @@
+---
+title: "Data Preprocess"
+output: html_document
+date: "2024-02-15"
+---
+
+
+Set gloabl options
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(fig.width=12, fig.height=8, fig.path='figs/',
+                      echo=T, warning=FALSE, message=FALSE)
+```
+
+
+
+
+
+
+Load the data manipulation libraries
+```{r}
+if (!require("DT")) install.packages('DT')
+if (!require("dtplyr")) install.packages('dtplyr')
+if (!require("lubridate")) install.packages('lubridate')
+if (!require("ggmap")) install.packages('ggmap')
+if (!require("choroplethrZip")) {
+  # install.packages("devtools")
+  library(devtools)
+  install_github('arilamstein/choroplethrZip@v1.5.0')}
+
+library(dtplyr)
+library(dplyr)
+library(DT)
+library(lubridate)
+```
+
+
+Install shiny
+```{r}
+if (!require("shiny")) install.packages("shiny")
+library(shiny)
+runExample("01_hello")
+```
+
+
+Load Data
+
+```{r read data}
+v1 <- read.csv("E:/GR 5243/FemaWebDisasterDeclarations.csv")
+v2 <- read.csv("E:/GR 5243/DisasterDeclarationsSummaries.csv")
+v3 <- read.csv("E:/GR 5243/PublicAssistanceApplicantsProgramDeliveries.csv")
+
+```
+
+Inspect the Data
+```{r}
+# View the first few rows of the data
+head(v1)
+
+# Summary statistics for each column
+summary(v1)
+
+# Structure of the data
+str(v1)
+```
+
+
+Handle Missing Values
+```{r}
+library(dplyr)
+library(tidyverse)
+na_count <- v1 %>%
+  summarise_all(~sum(is.na(.)))
+
+print(na_count)
+
+v1_sel <- v1 %>%
+  select(disasterName, stateCode, declarationType, disasterNumber)
+
+v2_sel <- v2 %>% 
+  select(state, disasterNumber, incidentType,incidentBeginDate,incidentEndDate, designatedArea)
+
+v3_sel <- v3 %>% 
+  select(currentProjectCost, disasterNumber)
+
+
+
+
+
+library(dplyr)
+combined <- inner_join(v1_sel, v2_sel, by = "disasterNumber")
+combined_df<- inner_join(combined, v3_sel, by = "disasterNumber")
+
+
+
+```
+
+
+Combine Disaster Type
+```{r}
+combined1 <- combined_df %>%
+  mutate(DisasterCategory = case_when(
+    incidentType %in% c("Dam/Levee Break", "Earthquake","Fire","Flood", "Freezing", "Tsunami", "Volcanic Eruption", "Mud/Landslide", "Drought") ~ "Natural Disasters",
+    incidentType %in% c("Chemical", "Toxic Substances", "Human Cause", "Terrorist") ~ "Human-caused Disasters",
+    incidentType %in% c("Coastal Storm","Hurricane","Tropical Storm","Severe Storm", "Snowstorm", "Winter Storm", "Severe Ice Storm", "Tornado", "Typhoon") ~ "Severe Weather",
+    incidentType %in% c("Biological") ~ "Biological",
+    TRUE ~ "Others"  # Default category for anything else
+  ))
+
+head(combined1,5)
+```
+
+Years for Map
+```{r}
+combined2 <- combined1 %>%
+  mutate(
+    incidentBeginMonth = format(ymd_hms(incidentBeginDate), "%Y-%m")
+  )
+
+
+combined2$Year <- sub("-.*", "", combined2$incidentBeginMonth)
+
+#To sort the data frame in ascending order of year
+combined2 <- combined2 %>%
+  mutate(Year = as.numeric(Year)) %>%
+  arrange(Year)
+
+# Calculate the occurrence counts for each state and disaster type in each year
+disaster_counts <- combined2 %>%
+  group_by(state = stateCode, DisasterCategory,Year) %>%
+  summarise(frequency = n()) 
+head(disaster_counts)
+
+# Calculate the cost of disaster for each state and disaster type in each year
+head(combined2)
+disaster_costs <- combined2 %>%
+  group_by(stateCode, DisasterCategory,Year) %>%
+  summarise(TotalProjectCost = sum(currentProjectCost, na.rm = TRUE), .groups = "drop")
+head(disaster_costs,5)
+```
+
+
+Time Series
+```{r}
+combined3 <- combined %>%
+  mutate(DisasterCategory = case_when(
+    incidentType %in% c("Dam/Levee Break", "Earthquake","Fire","Flood", "Freezing", "Tsunami", "Volcanic Eruption", "Mud/Landslide", "Drought") ~ "Natural Disasters",
+    incidentType %in% c("Chemical", "Toxic Substances", "Human Cause", "Terrorist") ~ "Human-caused Disasters",
+    incidentType %in% c("Coastal Storm","Hurricane","Tropical Storm","Severe Storm", "Snowstorm", "Winter Storm", "Severe Ice Storm", "Tornado", "Typhoon") ~ "Severe Weather",
+    incidentType %in% c("Biological") ~ "Biological",
+    TRUE ~ "Others"  # Default category for anything else
+  ))
+
+combined4 <- combined3 %>%
+  mutate(
+    incidentBeginMonth = format(ymd_hms(incidentBeginDate), "%Y-%m")
+  )
+
+
+
+```
+
+
+
+```{r}
+monthly_disasters <- combined4 %>%
+  group_by(incidentBeginMonth) %>%
+  summarise(NumberOfDisasters = n())
+
+
+print(monthly_disasters)
+
+monthly_disasters$incidentBeginMonth <- as.Date(paste0(monthly_disasters$incidentBeginMonth, "-01"))
+start_year <- as.numeric(format(min(monthly_disasters$incidentBeginMonth), "%Y"))
+start_month <- as.numeric(format(min(monthly_disasters$incidentBeginMonth), "%m"))
+
+plot(NumberOfDisasters ~ incidentBeginMonth, data = monthly_disasters, type = "l")
+
+```
+
+Calculate the occurrence counts for each state and disaster type
+```{r}
+disaster_counts_ts <- combined4 %>%
+  group_by(state = stateCode, DisasterCategory) %>%
+  summarise(frequency = n())
+
+
+```
+
+
+
+Time Series
+```{r}
+monthly_disasters$incidentBeginMonth <- as.Date(paste0(monthly_disasters$incidentBeginMonth, "-01"))
+# Assuming the aggregation is done and you have monthly counts
+# Converting to a ts object, assuming the start year and month are known (e.g., 2023 and 6)
+start_year <- as.numeric(format(min(monthly_disasters$incidentBeginMonth), "%Y"))
+start_month <- as.numeric(format(min(monthly_disasters$incidentBeginMonth), "%m"))
+disaster_ts <- ts(monthly_disasters$NumberOfDisasters, start = c(start_year, start_month), frequency = 12)
+install.packages("forecast")
+library(forecast)
+
+# AR Model
+ar_model <- auto.arima(disaster_ts, max.p = 5, max.q = 0, max.d = 2, stepwise = FALSE, approximation = FALSE)
+
+# MA Model
+ma_model <- auto.arima(disaster_ts, max.p = 0, max.q = 5, max.d = 2, stepwise = FALSE, approximation = FALSE)
+
+# ARMA Model
+arma_model <- auto.arima(disaster_ts, max.p = 5, max.q = 5, max.d = 2, stepwise = FALSE, approximation = FALSE)
+
+# ARIMA Model
+arima_model <- auto.arima(disaster_ts, stepwise = FALSE, approximation = FALSE)
+
+
+summary(ar_model)
+summary(ma_model)
+summary(arma_model)
+summary(arima_model)
+```
+
+
+
+Plots 
+```{r}
+par(mfrow = c(5,1))
+plot(disaster_ts, main = "Monthly Disaster Count", xlab = "Month", ylab = "Disaster Count")
+
+# AR Model Plot
+plot(forecast(ar_model), main = "AR Model Forecast")
+
+# MA Model Plot
+plot(forecast(ma_model), main = "MA Model Forecast")
+
+# ARMA Model Plot
+plot(forecast(arma_model), main = "ARMA Model Forecast")
+
+# ARIMA Model Plot
+plot(forecast(arima_model), main = "ARIMA Model Forecast")
+```
+
+```{r}
+#may not be used 
+install.packages("leaflet")
+
+library(shiny)
+library(leaflet)
+library(ggplot2)
+library(dplyr)
+
+ui <- fluidPage(
+  titlePanel("Disaster Analysis Dashboard"),
+  sidebarLayout(
+    sidebarPanel(
+      selectInput("disasterType", "Choose a Disaster Type:", choices = unique(combined$incidentType)),
+      dateRangeInput("dateRange", "Select Date Range:", start = min(combined$incidentBeginDate), end = max(combined$incidentEndDate)),
+      # Add any other inputs you need
+    ),
+    mainPanel(
+      tabsetPanel(
+        tabPanel("Map", leafletOutput("disasterMap")),
+        tabPanel("Trend", plotOutput("trendPlot")),
+        # Add any other panels you need
+      )
+    )
+  )
+)
+
+server <- function(input, output, session) {
+  # Reactive expression to filter data based on inputs
+  filtered_data <- reactive({
+    combined %>%
+      filter(incidentType == input$disasterType,
+             incidentBeginDate >= input$dateRange[1],
+             incidentEndDate <= input$dateRange[2])
+  })
+  
+  # Map output
+  output$disasterMap <- renderLeaflet({
+    # Use your filtered_data() to create the map
+  })
+  
+  # Trend plot output
+  output$trendPlot <- renderPlot({
+    # Use your filtered_data() to create the plot
+  })
+  
+  # Add any other output components you need
+}
+
+# Run the app
+shinyApp(ui, server)
+```
+
