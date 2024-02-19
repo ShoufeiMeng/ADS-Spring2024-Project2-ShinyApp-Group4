@@ -4,7 +4,7 @@
 
 Term: Spring 2024
 
-![screenshot](doc/figs/map.jpg)
+![screenshot](doc/figs/map.png)
 
 ## U.S. Disaster Analysis
 Term: Spring 2024
