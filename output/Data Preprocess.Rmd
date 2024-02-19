@@ -292,7 +292,8 @@ server <- function(input, output, session) {
     states <- filtered_stats()$state
     occurrences <- sort(table(states),decreasing = TRUE)
     
-    barplot(occurrences, main = "Disaster Occurrences by State", xlab = "State", ylab = "Number of Occurrences", col = "lightblue", border = "black")
+    barplot(occurrences, main = "Disaster Occurrences by State", 
+            xlab = "State", ylab = "Number of Occurrences", col = "lightblue", border = "black")
   })
   
   #ARIMA
