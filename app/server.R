@@ -35,7 +35,9 @@ library(scales)
 library(forecast)
 library(leaflet.extras)
 
-#Data Processing
+#Data Cleaning and Processing
+
+# Load data
 v1 <- read.csv("~/ADS-Spring2024-Project2-ShinyApp-Group4/data/FemaWebDisasterDeclarations.csv")
 v2 <- read.csv("~/ADS-Spring2024-Project2-ShinyApp-Group4/data/DisasterDeclarationsSummaries.csv")
 v3 <- read.csv("~/ADS-Spring2024-Project2-ShinyApp-Group4/data/PublicAssistanceApplicantsProgramDeliveries.csv")
