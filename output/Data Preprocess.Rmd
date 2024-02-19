@@ -257,7 +257,7 @@ data_merged <- merge(combined_disaster, state_location, by = "state")
 
 head(data_merged)
 
-write.csv(combined_disaster, "~/ADS-Spring2024-Project2-ShinyApp-Group4/data/DisasterFinal.csv")
+write.csv(data_merged, "~/ADS-Spring2024-Project2-ShinyApp-Group4/data/DisasterFinal.csv")
 ```
 
 ```{r}
@@ -267,10 +267,10 @@ ui <- fluidPage(
   sidebarLayout(
     sidebarPanel(
       sliderInput("year",
-                  "Year:",
+                  "Year",
                   min = min(data_merged$Year),
                   max = max(data_merged$Year),
-                  value = min(data_merged$Year),
+                  value = min(data_merged$Year), # set initial value to be the minimum year
                   step = 1),
       radioButtons("metric", "Data",
                    choices = list("Frequency" = "frequency", "Total Project Cost" = "TotalProjectCost"))
@@ -287,8 +287,8 @@ server <- function(input, output) {
     data_filtered <- data_merged %>%
       filter(Year == input$year) %>%
       mutate(radius = case_when(
-        input$metric == "frequency" ~ sqrt(frequency) * 1000,
-        TRUE ~ sqrt(TotalProjectCost/1e6) * 1000
+        input$metric == "frequency" ~ sqrt(frequency) * 1000, # adjust point size
+        TRUE ~ sqrt(TotalProjectCost/1e6) * 1000 # adjust point size
       ))
     data_filtered
   })
@@ -302,7 +302,7 @@ server <- function(input, output) {
     
     leaflet(data_filtered) %>%
       addTiles() %>%
-      setView(lng = -98.583333, lat = 39.833333, zoom = 4) %>%
+      setView(lng = -98.583333, lat = 39.833333, zoom = 4) %>% # set map view to US
       addCircles(lng = ~longitude, lat = ~latitude, weight = 1,
                  radius = ~radius,
                  color = ~pal(DisasterCategory),
@@ -321,7 +321,7 @@ server <- function(input, output) {
   }
 }
 
-# Run the application
+# Run the app
 shinyApp(ui, server)
 ```
 
