@@ -195,7 +195,7 @@ ui <- fluidPage(
   
   tabsetPanel(
     
-    # Map for disaster count and project cost
+    # Map showing disaster count and project cost
     tabPanel("Map",
              sidebarLayout(
                sidebarPanel(
