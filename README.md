@@ -2,26 +2,14 @@
 
 ### [Project Description](doc/project2_desc.md)
 
-Term: Fall 2023
+Term: Spring 2024
 
 ![screenshot](doc/figs/map.jpg)
 
-In this second project of GR5243 Applied Data Science, we develop a *Exploratory Data Analysis and Visualization* shiny app using one of **the OpenFEMA data sets** of your choice. See [Project 2 Description](doc/project2_desc.md) for more details.  
+## US Disaster Count & Project Cost
+Term: Spring 2024
 
-The **learning goals** for this project is:
-
-- business intelligence for data science
-- data cleaning
-- data visualization
-- systems development/design life cycle
-- shiny app/shiny server
-
-*The above general statement about project 2 can be removed once you are finished with your project. It is optional.
-
-## Project Title Lorem ipsum dolor sit amet
-Term: Fall 2023
-
-+ Team #
++ Team 4
 + **Projec title**: + Team members
 	+ team member 1
 	+ team member 2
