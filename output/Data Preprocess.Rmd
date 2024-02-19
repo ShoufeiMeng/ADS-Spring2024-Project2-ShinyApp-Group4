@@ -44,7 +44,7 @@ if (!require("leaflet")) install.packages("leaflet")
 library(leaflet)
 if (!require("scales")) install.packages("scales")
 library(scales)
-#runExample("01_hello")
+runExample("01_hello")
 ```
 
 
