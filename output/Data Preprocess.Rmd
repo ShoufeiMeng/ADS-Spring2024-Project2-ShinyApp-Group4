@@ -1,19 +1,14 @@
 ---
-title: "Data Preprocess"
+title: "U.S. Disaster Analysis"
 output: html_document
-date: "2024-02-15"
+date: "2024-02-18"
 ---
 
-
-Set gloabl options
+Set global options
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(fig.width=12, fig.height=8, fig.path='figs/',
                       echo=T, warning=FALSE, message=FALSE)
 ```
-
-
-
-
 
 
 Load the data manipulation libraries
@@ -22,6 +17,7 @@ if (!require("DT")) install.packages('DT')
 if (!require("dtplyr")) install.packages('dtplyr')
 if (!require("lubridate")) install.packages('lubridate')
 if (!require("ggmap")) install.packages('ggmap')
+if (!require("tidyverse")) install.packages('tidyverse')
 if (!require("choroplethrZip")) {
   # install.packages("devtools")
   library(devtools)
@@ -31,30 +27,28 @@ library(dtplyr)
 library(dplyr)
 library(DT)
 library(lubridate)
+library(tidyverse)
 ```
 
-
-Install shiny
 ```{r}
 if (!require("shiny")) install.packages("shiny")
-library(shiny)
 if (!require("shinydashboard")) install.packages("shinydashboard")
-library(shinydashboard)
 if (!require("leaflet")) install.packages("leaflet")
-library(leaflet)
 if (!require("scales")) install.packages("scales")
+if (!require("forecast")) install.packages("forecast")
+
+library(shiny)
+library(shinydashboard)
+library(leaflet)
 library(scales)
-runExample("01_hello")
+library(forecast)
 ```
 
-
 Load Data
-
 ```{r read data}
 v1 <- read.csv("~/ADS-Spring2024-Project2-ShinyApp-Group4/data/FemaWebDisasterDeclarations.csv")
 v2 <- read.csv("~/ADS-Spring2024-Project2-ShinyApp-Group4/data/DisasterDeclarationsSummaries.csv")
 v3 <- read.csv("~/ADS-Spring2024-Project2-ShinyApp-Group4/data/PublicAssistanceApplicantsProgramDeliveries.csv")
-
 ```
 
 Inspect the Data
@@ -72,8 +66,6 @@ str(v1)
 
 Handle Missing Values
 ```{r}
-library(dplyr)
-library(tidyverse)
 na_count <- v1 %>%
   summarise_all(~sum(is.na(.)))
 
@@ -88,16 +80,8 @@ v2_sel <- v2 %>%
 v3_sel <- v3 %>% 
   select(currentProjectCost, disasterNumber)
 
-
-
-
-
-library(dplyr)
 combined <- inner_join(v1_sel, v2_sel, by = "disasterNumber")
 combined_df<- inner_join(combined, v3_sel, by = "disasterNumber")
-
-
-
 ```
 
 
@@ -144,7 +128,6 @@ disaster_costs <- combined2 %>%
 head(disaster_costs,5)
 ```
 
-
 Time Series
 ```{r}
 combined3 <- combined %>%
@@ -160,12 +143,7 @@ combined4 <- combined3 %>%
   mutate(
     incidentBeginMonth = format(ymd_hms(incidentBeginDate), "%Y-%m")
   )
-
-
-
 ```
-
-
 
 ```{r}
 monthly_disasters <- combined4 %>%
@@ -180,7 +158,6 @@ start_year <- as.numeric(format(min(monthly_disasters$incidentBeginMonth), "%Y")
 start_month <- as.numeric(format(min(monthly_disasters$incidentBeginMonth), "%m"))
 
 plot(NumberOfDisasters ~ incidentBeginMonth, data = monthly_disasters, type = "l")
-
 ```
 
 Calculate the occurrence counts for each state and disaster type
@@ -188,64 +165,15 @@ Calculate the occurrence counts for each state and disaster type
 disaster_counts_ts <- combined4 %>%
   group_by(state = stateCode, DisasterCategory) %>%
   summarise(frequency = n())
-
-
 ```
-
-
 
 Time Series
 ```{r}
-monthly_disasters$incidentBeginMonth <- as.Date(paste0(monthly_disasters$incidentBeginMonth, "-01"))
-# Assuming the aggregation is done and you have monthly counts
-# Converting to a ts object, assuming the start year and month are known (e.g., 2023 and 6)
-start_year <- as.numeric(format(min(monthly_disasters$incidentBeginMonth), "%Y"))
-start_month <- as.numeric(format(min(monthly_disasters$incidentBeginMonth), "%m"))
-disaster_ts <- ts(monthly_disasters$NumberOfDisasters, start = c(start_year, start_month), frequency = 12)
-install.packages("forecast")
-library(forecast)
+monthly_disasters <- combined4 %>%
+  group_by(incidentBeginMonth, state) %>%
+  summarise(NumberOfDisasters = n())
 
-# AR Model
-ar_model <- auto.arima(disaster_ts, max.p = 5, max.q = 0, max.d = 2, stepwise = FALSE, approximation = FALSE)
-
-# MA Model
-ma_model <- auto.arima(disaster_ts, max.p = 0, max.q = 5, max.d = 2, stepwise = FALSE, approximation = FALSE)
-
-# ARMA Model
-arma_model <- auto.arima(disaster_ts, max.p = 5, max.q = 5, max.d = 2, stepwise = FALSE, approximation = FALSE)
-
-# ARIMA Model
-arima_model <- auto.arima(disaster_ts, stepwise = FALSE, approximation = FALSE)
-
-
-summary(ar_model)
-summary(ma_model)
-summary(arma_model)
-summary(arima_model)
-```
-
-
-
-Plots 
-```{r}
-par(mfrow = c(5,1))
-plot(disaster_ts, main = "Monthly Disaster Count", xlab = "Month", ylab = "Disaster Count")
-
-# AR Model Plot
-plot(forecast(ar_model), main = "AR Model Forecast")
-
-# MA Model Plot
-plot(forecast(ma_model), main = "MA Model Forecast")
-
-# ARMA Model Plot
-plot(forecast(arma_model), main = "ARMA Model Forecast")
-
-# ARIMA Model Plot
-plot(forecast(arima_model), main = "ARIMA Model Forecast")
-```
-
-```{r}
-unique(disaster_counts$DisasterCategory)
+table(monthly_disasters$state)
 ```
 
 ```{r}
@@ -263,44 +191,78 @@ write.csv(data_merged, "~/ADS-Spring2024-Project2-ShinyApp-Group4/data/DisasterF
 ```{r}
 # UI
 ui <- fluidPage(
-  titlePanel("US Disaster Frequency & Project Cost"),
-  sidebarLayout(
-    sidebarPanel(
-      sliderInput("year",
-                  "Year",
-                  min = min(data_merged$Year),
-                  max = max(data_merged$Year),
-                  value = min(data_merged$Year), # set initial value to be the minimum year
-                  step = 1),
-      radioButtons("metric", "Data",
-                   choices = list("Frequency" = "frequency", "Total Project Cost" = "TotalProjectCost"))
-    ),
-    mainPanel(leafletOutput("map"))
+  titlePanel("U.S. Disaster Analysis Dashboard"),
+  
+  tabsetPanel(
+    
+    # Map for disaster count and project cost
+    tabPanel("Map",
+             sidebarLayout(
+               sidebarPanel(
+                 selectInput("year", "Year", 
+                             choices = sort(unique(data_merged$Year), decreasing = TRUE), 
+                             selected = max(data_merged$Year)),
+                 radioButtons("metric", "Data",
+                              choices = list("Frequency" = "frequency", "Total Project Cost" = "TotalProjectCost")),
+                 ),
+               mainPanel(
+                 leafletOutput("map")
+                 )
+               )
+             ),
+    
+    # Statistical Analysis         
+    tabPanel('Statistical Analysis',
+             sidebarPanel(
+               selectInput("year", "Choose a Year:", 
+                           choices = sort(unique(year(combined$incidentBeginDate)), decreasing = TRUE),2023),
+               selectInput("disasterType", "Choose a Disaster Type:", 
+                           choices = unique(combined$incidentType))
+               ),
+             mainPanel(
+               plotOutput("stat_hist")
+               )
+             ),
+
+    # ARIMA
+    tabPanel("ARIMA",
+             sidebarPanel(
+               selectInput("state", "Choose a State:",choices=unique(monthly_disasters$state)),
+               sliderInput("AR", "Choose p:",0,10,0),
+               sliderInput("I", "Choose d:",0,10,0),
+               sliderInput("MA", "Choose q:",0,10,0)
+               ),
+             mainPanel(
+               plotOutput("acf_plot"),
+               plotOutput("pacf_plot"),
+               verbatimTextOutput("arima_summary"),
+               plotOutput("forecast_plot")
+               )
+             ),
   )
 )
 
 # Define server logic
-server <- function(input, output) {
+server <- function(input, output, session) {
   
-  # Reactive expression to filter the data based on the selected year and to calculate the radius
+  # Map for disaster count and project cost
   reactive_data <- reactive({
-    data_filtered <- data_merged %>%
+    map_filtered <- data_merged %>%
       filter(Year == input$year) %>%
       mutate(radius = case_when(
         input$metric == "frequency" ~ sqrt(frequency) * 1000, # adjust point size
         TRUE ~ sqrt(TotalProjectCost/1e6) * 1000 # adjust point size
       ))
-    data_filtered
+    map_filtered
   })
   
-  # Render the map based on the reactive expression
   output$map <- renderLeaflet({
-    data_filtered <- reactive_data()
+    map_filtered <- reactive_data()
     
-    pal <- colorFactor(rainbow(length(unique(data_filtered$DisasterCategory))),
-                       data_filtered$DisasterCategory)
+    pal <- colorFactor(rainbow(length(unique(map_filtered$DisasterCategory))),
+                       map_filtered$DisasterCategory)
     
-    leaflet(data_filtered) %>%
+    leaflet(map_filtered) %>%
       addTiles() %>%
       setView(lng = -98.583333, lat = 39.833333, zoom = 4) %>% # set map view to US
       addCircles(lng = ~longitude, lat = ~latitude, weight = 1,
@@ -309,9 +271,8 @@ server <- function(input, output) {
                  popup = ~paste(name, "<br>", DisasterCategory, "<br>", Year, "<br>", input$metric, ":", 
                                 getMetricValue(input$metric, frequency, TotalProjectCost))) %>%
       addLegend("bottomright", pal = pal, values = ~DisasterCategory, title = "Disaster Type", opacity = 0.8)
-  })
+    })
   
-  # Function to return the correct metric value for the popup
   getMetricValue <- function(metric, frequency, totalCost) {
     if(metric == "frequency") {
       return(frequency)
@@ -319,9 +280,52 @@ server <- function(input, output) {
       return(totalCost)
     }
   }
+  
+  # Statistical Analysis
+  filtered_stats <- reactive({
+    combined %>%
+      filter(year(incidentBeginDate) == input$year,
+             incidentType == input$disasterType)
+  })
+  
+  output$stat_hist <- renderPlot({
+    states <- filtered_stats()$state
+    occurrences <- sort(table(states),decreasing = TRUE)
+    
+    barplot(occurrences, main = "Disaster Occurrences by State", xlab = "State", ylab = "Number of Occurrences", col = "lightblue", border = "black")
+  })
+  
+  #ARIMA
+  disasters_filtered=reactive({
+    filtered_stats = filter(monthly_disasters, state == input$state)
+    filtered_stats = arrange(filtered_stats, incidentBeginMonth)
+    filtered_stats$incidentBeginMonth = as.Date(paste0(filtered_stats$incidentBeginMonth, "-01"))
+    filtered_stats
+  })
+  disaster_ts=reactive({
+    start_year = as.numeric(format(min(disasters_filtered()$incidentBeginMonth), "%Y"))
+    start_month = as.numeric(format(min(disasters_filtered()$incidentBeginMonth), "%m"))
+    tem=ts(disasters_filtered()$NumberOfDisasters, start = c(start_year, start_month), frequency = 12)
+    return(tem)
+  })
+    
+  output$arima_summary = renderPrint({
+    arima(disaster_ts(),c(input$AR,input$I,input$MA))
+  })
+  output$forecast_plot = renderPlot({
+    fit=arima(disaster_ts(),c(input$AR,input$I,input$MA))
+    forecast_values <- forecast(fit, h=10)
+    plot(forecast_values, main="ARIMA Forecast", xlab="Time", ylab="Value")
+  })
+  output$acf_plot = renderPlot({
+    acf(disaster_ts(),main='ACF')
+  })
+  output$pacf_plot = renderPlot({
+    pacf(disaster_ts(),main='PACF')
+  })
 }
 
-# Run the app
+# Run the shiny app
 shinyApp(ui, server)
 ```
 
