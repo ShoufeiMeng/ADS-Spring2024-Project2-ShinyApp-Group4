@@ -6,11 +6,11 @@ Term: Spring 2024
 
 ![screenshot](doc/figs/map.jpg)
 
-## US Disaster Count & Project Cost
+## US Disaster
 Term: Spring 2024
 
 + Team 4
-+ **US Disaster Count & Project Cost**:
++ **US Disaster**:
 	+ Tianyi Xia
 	+ Yang Yu
 	+ Shoufei Meng
