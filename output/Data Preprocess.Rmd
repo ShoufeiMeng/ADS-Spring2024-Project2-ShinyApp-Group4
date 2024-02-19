@@ -263,7 +263,7 @@ write.csv(data_merged, "~/ADS-Spring2024-Project2-ShinyApp-Group4/data/DisasterF
 ```{r}
 # UI
 ui <- fluidPage(
-  titlePanel("US Disaster Data Visualization"),
+  titlePanel("US Disaster Frequency & Project Cost"),
   sidebarLayout(
     sidebarPanel(
       sliderInput("year",
