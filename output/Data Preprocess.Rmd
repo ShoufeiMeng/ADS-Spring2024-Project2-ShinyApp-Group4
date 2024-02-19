@@ -177,15 +177,13 @@ table(monthly_disasters$state)
 ```
 
 ```{r}
-# combine disaster cost and count for each state each year
+# combine state location and disaster info for map
 state_location <- read.csv("~/ADS-Spring2024-Project2-ShinyApp-Group4/data/UsStateLocation.csv")
 
 combined_disaster <- inner_join(disaster_counts, disaster_costs, by = c("state"="stateCode", "Year", "DisasterCategory"))
 data_merged <- merge(combined_disaster, state_location, by = "state")
 
 head(data_merged)
-
-write.csv(data_merged, "~/ADS-Spring2024-Project2-ShinyApp-Group4/data/DisasterFinal.csv")
 ```
 
 ```{r}
