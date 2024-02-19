@@ -1,74 +1,71 @@
+if (!require("shiny")) install.packages("shiny")
+if (!require("shinydashboard")) install.packages("shinydashboard")
+if (!require("leaflet")) install.packages("leaflet")
+if (!require("scales")) install.packages("scales")
+if (!require("forecast")) install.packages("forecast")
+if (!require("leaflet.extras")) install.packages("leaflet.extras")
 
-if (!require("shiny")) {
-  install.packages("shiny")
-  library(shiny)
-}
-if (!require("shinyWidgets")) {
-  install.packages("shinyWidgets")
-  library(shinyWidgets)
-}
-if (!require("shinythemes")) {
-  install.packages("shinythemes")
-  library(shinythemes)
-}
-if (!require("leaflet")) {
-  install.packages("leaflet")
-  library(leaflet)
-}
-if (!require("leaflet.extras")) {
-  install.packages("leaflet.extras")
-  library(leaflet.extras)
-}
+library(dtplyr)
+library(dplyr)
+library(DT)
+library(lubridate)
+library(tidyverse)
+library(shiny)
+library(shinydashboard)
+library(leaflet)
+library(scales)
+library(forecast)
+library(leaflet.extras)
 
-# Define UI for application that draws a histogram
-shinyUI(
-    navbarPage(strong("Citi Bike Study",style="color: white;"), 
-               theme=shinytheme("cerulean"), # select your themes https://rstudio.github.io/shinythemes/
-#------------------------------- tab panel - Maps ---------------------------------
-                tabPanel("Maps",
-                         icon = icon("map-marker-alt"), #choose the icon for
-                         div(class = 'outer',
-                        # side by side plots
-                        fluidRow(
-                                splitLayout(cellWidths = c("50%", "50%"), 
-                                             leafletOutput("left_map",width="100%",height=1200),
-                                             leafletOutput("right_map",width="100%",height=1200))),
-                        #control panel on the left
-                        absolutePanel(id = "control", class = "panel panel-default", fixed = TRUE, draggable = TRUE,
-                                      top = 200, left = 50, right = "auto", bottom = "auto", width = 250, height = "auto",
-                                      tags$h4('Citi Bike Activity Comparison'), 
-                                      tags$br(),
-                                      tags$h5('Pre-covid(Left) Right(Right)'), 
-                                      prettyRadioButtons(
-                                                      inputId = "adjust_score",
-                                                      label = "Score List:", 
-                                                      choices = c("start_cnt", 
-                                                                  "end_cnt", 
-                                                                  "day_diff_absolute",
-                                                                  "day_diff_percentage"),
-                                                      inline = TRUE, 
-                                                      status = "danger",
-                                                      fill = TRUE
-                                                        ),
-                                      awesomeRadio("adjust_time", 
-                                                   label="Time",
-                                                    choices =c("Overall",
-                                                               "Weekday", 
-                                                               "Weekend"), 
-                                                    selected = "Overall",
-                                                    status = "warning"),
-                                      # selectInput('adjust_weather',
-                                      #             label = 'Adjust for Weather',
-                                      #             choices = c('Yes','No'), 
-                                      #             selected = 'Yes'
-                                      #             ),
-                                      style = "opacity: 0.80"
-                                      
-                                ), #Panel Control - Closing
-                            ) #Maps - Div closing
-                        ) #tabPanel maps closing
-   
-
-
-    ) #navbarPage closing  
-) #Shiny UI closing    
+# Define UI for application (map, histogram, ARIMA)
+ui <- fluidPage(
+  titlePanel("U.S. Disaster Analysis Dashboard"),
+  
+  tabsetPanel(
+    
+    # Map showing disaster count and project cost
+    tabPanel("Map",
+             sidebarLayout(
+               sidebarPanel(
+                 selectInput("year", "Year", 
+                             choices = sort(unique(data_merged$Year), decreasing = TRUE), 
+                             selected = max(data_merged$Year)),
+                 radioButtons("metric", "Data",
+                              choices = list("Frequency" = "frequency", "Total Project Cost" = "TotalProjectCost")),
+               ),
+               mainPanel(
+                 leafletOutput("map")
+               )
+             )
+    ),
+    
+    # Statistical Analysis         
+    tabPanel('Statistical Analysis',
+             sidebarPanel(
+               selectInput("year", "Choose a Year:", 
+                           choices = sort(unique(year(combined$incidentBeginDate)), decreasing = TRUE),2023),
+               selectInput("disasterType", "Choose a Disaster Type:", 
+                           choices = unique(combined$incidentType))
+             ),
+             mainPanel(
+               plotOutput("stat_hist")
+             )
+    ),
+    
+    # ARIMA
+    tabPanel("ARIMA",
+             sidebarPanel(
+               selectInput("state", "Choose a State:",choices=unique(monthly_disasters$state)),
+               sliderInput("AR", "Choose p:",0,10,0),
+               sliderInput("I", "Choose d:",0,10,0),
+               sliderInput("MA", "Choose q:",0,10,0)
+             ),
+             mainPanel(
+               plotOutput("acf_plot"),
+               plotOutput("pacf_plot"),
+               verbatimTextOutput("arima_summary"),
+               plotOutput("forecast_plot")
+             )
+    ),
+  )
+)
