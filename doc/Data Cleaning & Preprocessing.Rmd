@@ -175,6 +175,7 @@ monthly_disasters <- combined4 %>%
 table(monthly_disasters$state)
 ```
 
+Merge dataset for map
 ```{r}
 # combine state location and disaster info for map
 state_location <- read.csv("~/ADS-Spring2024-Project2-ShinyApp-Group4/data/UsStateLocation.csv")
