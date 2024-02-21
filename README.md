@@ -24,7 +24,10 @@ Term: Spring 2024
 
 + **Findings**:
 	+ Severe weather and natural disasters are the two disasters that will have the greatest impact on the United States through 2020. The Southeast is highly impacted by severe weather. The central as well as the upper central part of the country is highly affected by natural disasters. However, in 2020, due to the emergence of a new coronavirus, every state in the U.S. is significantly impacted by it.The Lower Middle is significantly impacted by severe weather in 2021. Notably, California is significantly affected by severe weather and natural disasters in 2022 and 2023.
+	+ According to our data framework, the disasters faced by different states are largely positively correlated with the costs they face. The size of the circle indicates the magnitude of the cost. However, it also appears that some disasters have a high frequency but not a high cost. Situations also emerged where the frequency of disasters was high but the costs were very large.
+	+ For each state we constructed an ARIMA model and plotted its ACF and PACF to help us determine the order of the model. At the bottom we plotted the predictions of disaster frequency in the short term.
 
++ **Limitation & Future Extension**: In our map table there is only data for 2016-2023, indicating that there is still too little data available to us to be very powerful and convincing. In the histogram, some data for disasters are missing, which is why the x-axis is shown at positive infinity. If we want to show more convincing maps as well as time series predictions, we may need more data to show our ideas.
 
 + **Shiny App Link**: [https://helena-hu.shinyapps.io/US_Disaster_Shiny/](https://helena-hu.shinyapps.io/US_Disaster_Shiny/)
 
