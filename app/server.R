@@ -7,198 +7,109 @@
 #    http://shiny.rstudio.com/
 #
 ###############################Install Related Packages #######################
-if (!require("shiny")) {
-    install.packages("shiny")
-    library(shiny)
-}
-if (!require("leaflet")) {
-    install.packages("leaflet")
-    library(leaflet)
-}
-if (!require("leaflet.extras")) {
-    install.packages("leaflet.extras")
-    library(leaflet.extras)
-}
-if (!require("dplyr")) {
-    install.packages("dplyr")
-    library(dplyr)
-}
-if (!require("magrittr")) {
-    install.packages("magrittr")
-    library(magrittr)
-}
-if (!require("mapview")) {
-    install.packages("mapview")
-    library(mapview)
-}
-if (!require("leafsync")) {
-    install.packages("leafsync")
-    library(leafsync)
-}
+if (!require("dtplyr")) install.packages('dtplyr')
+if (!require("dtplyr")) install.packages('dtplyr')
+if (!require("shiny")) install.packages("shiny")
+if (!require("shinydashboard")) install.packages("shinydashboard")
+if (!require("leaflet")) install.packages("leaflet")
+if (!require("scales")) install.packages("scales")
+if (!require("forecast")) install.packages("forecast")
+if (!require("leaflet.extras")) install.packages("leaflet.extras")
 
-#Data Processing
-total_citi_bike_df = read.csv('../data/citibike_data.csv')
-##compute the daily in and out difference for the station
-total_citi_bike_df$day_diff = total_citi_bike_df$endcount - total_citi_bike_df$startcount
-#assign each column to weekend or weekday
-total_citi_bike_df$weekend_or_weekday = ifelse(total_citi_bike_df$weekday %in% c('Saturday','Sunday'), "Weekend", "Weekday")
+library(dtplyr)
+library(dplyr)
+library(shiny)
+library(shinydashboard)
+library(leaflet)
+library(scales)
+library(forecast)
+library(leaflet.extras)
 
-#station info
-citi_bike_station_info <- total_citi_bike_df[,c('station_id','station_name','station_longitude','station_latitude')]
-#remove the duplicates based on station id 
-citi_bike_station_info <- citi_bike_station_info[!duplicated(citi_bike_station_info[ , c("station_id")]),]
-
-#split the bike data to pre-covid and covid time period
-citi_bike_pre_covid_df = total_citi_bike_df[difftime(total_citi_bike_df$date,"2019-05-31")<=0,] #2019-05-01 ~ 2019-05-31
-citi_bike_covid_df = total_citi_bike_df[difftime(total_citi_bike_df$date,"2020-04-30")>=0,] #2020-05-01 ~ 2021-05-31
-
+# Load data
+data_merged <- read.csv("~/ADS-Spring2024-Project2-ShinyApp-Group4/data/Disaster_Map.csv")
+combined <- read.csv("~/ADS-Spring2024-Project2-ShinyApp-Group4/data/Disaster_Hist.csv")
+monthly_disasters <- read.csv("~/ADS-Spring2024-Project2-ShinyApp-Group4/data/Disaster_Monthly.csv")
 
 # Define server logic required to draw a histogram
-shinyServer(function(input, output) {
-
-    ## Map Tab section
+server <- function(input, output, session) {
+  
+  # Map for disaster count and project cost
+  reactive_data <- reactive({
+    map_filtered <- data_merged %>%
+      filter(Year == input$year) %>%
+      mutate(radius = case_when(
+        input$metric == "frequency" ~ sqrt(frequency) * 1000, # adjust point size
+        TRUE ~ sqrt(TotalProjectCost/1e6) * 1000 # adjust point size
+        ))
+    map_filtered
+  })
+  
+  output$map <- renderLeaflet({
+    map_filtered <- reactive_data()
     
-    output$left_map <- renderLeaflet({
+    pal <- colorFactor(rainbow(length(unique(map_filtered$DisasterCategory))),
+                       map_filtered$DisasterCategory)
     
-    #adjust for weekday/weekend effect
-    if (input$adjust_time =='Overall') {
-        leaflet_plt_df <- citi_bike_pre_covid_df %>% 
-                            group_by(station_id) %>%
-                            summarise(total_start_count = sum(startcount),
-                                      total_end_count = sum(endcount),
-                                      total_day_diff = sum(day_diff),
-                                      total_diff_percentage = sum(day_diff)/sum(startcount),
-                            ) %>% left_join(citi_bike_station_info,by='station_id')
+    leaflet(map_filtered) %>%
+      addTiles() %>%
+      setView(lng = -98.583333, lat = 39.833333, zoom = 4) %>% # set map view to US
+      addCircles(lng = ~longitude, lat = ~latitude, weight = 1,
+                 radius = ~radius,
+                 color = ~pal(DisasterCategory),
+                 popup = ~paste(name, "<br>", DisasterCategory, "<br>", Year, "<br>", input$metric, ":", 
+                                getMetricValue(input$metric, frequency, TotalProjectCost))) %>%
+      addLegend("bottomright", pal = pal, values = ~DisasterCategory, title = "Disaster Type", opacity = 0.8)
+  })
+  
+  getMetricValue <- function(metric, frequency, totalCost) {
+    if(metric == "frequency") {
+      return(frequency)
     } else {
-        leaflet_plt_df <- citi_bike_pre_covid_df %>% 
-                            filter(weekend_or_weekday == input$adjust_time) %>%
-                            group_by(station_id) %>%
-                                summarise(total_start_count = sum(startcount),
-                                          total_end_count = sum(endcount),
-                                          total_day_diff = sum(day_diff),
-                                          total_diff_percentage = sum(day_diff)/sum(startcount),
-                                ) %>% left_join(citi_bike_station_info,by='station_id')
-                            } 
-
-        
-    map_2019 <- leaflet_plt_df %>%
-         leaflet(options = leafletOptions(minZoom = 11, maxZoom = 13)) %>%
-         addTiles() %>%
-         addProviderTiles("CartoDB.Positron",
-                          options = providerTileOptions(noWrap = TRUE)) %>%
-         setView(-73.9834,40.7504,zoom = 12)
-     
-     if (input$adjust_score == 'start_cnt') {
-         map_2019 %>%
-             addHeatmap(
-                        lng=~station_longitude,
-                        lat=~station_latitude,
-                        intensity=~total_start_count,
-                        max=4000,
-                        radius=8,
-                        blur=10)
-     }else if (input$adjust_score == 'end_cnt') {
-         map_2019 %>%
-             addHeatmap(
-                        lng=~station_longitude,
-                        lat=~station_latitude,
-                        intensity=~total_end_count,
-                        max=4000,
-                        radius=8,
-                        blur=10)
-     } else if (input$adjust_score == 'day_diff_absolute'){
-         map_2019 %>%
-             addHeatmap(
-                        lng=~station_longitude,
-                        lat=~station_latitude,
-                        intensity=~total_day_diff,
-                        max=50,
-                        radius=8,
-                        blur=10)
-         
-     }else if (input$adjust_score == 'day_diff_percentage'){
-         map_2019 %>%
-             addHeatmap(
-                        lng=~station_longitude,
-                        lat=~station_latitude,
-                        intensity=~total_diff_percentage,#change to total day diff percentage
-                        max=0.1,
-                        radius=8,
-                        blur=10)
-         
-     }
-     }) #left map plot
+      return(totalCost)
+    }
+  }
+  
+  # Statistical Analysis
+  filtered_stats <- reactive({
+    combined %>%
+      filter(year(incidentBeginDate) == input$year,
+             incidentType == input$disasterType)
+  })
+  
+  output$stat_hist <- renderPlot({
+    states <- filtered_stats()$state
+    occurrences <- sort(table(states),decreasing = TRUE)
     
-    output$right_map <- renderLeaflet({
-        #adjust for weekday/weekend effect
-        if (input$adjust_time =='Overall') {
-            leaflet_plt_df <- citi_bike_covid_df %>% 
-                group_by(station_id) %>%
-                summarise(total_start_count = sum(startcount),
-                          total_end_count = sum(endcount),
-                          total_day_diff = sum(day_diff),
-                          total_diff_percentage = sum(day_diff)/sum(startcount),
-                ) %>% left_join(citi_bike_station_info,by='station_id')
-        } else {
-            leaflet_plt_df <- citi_bike_covid_df %>% 
-                filter(weekend_or_weekday == input$adjust_time) %>%
-                group_by(station_id) %>%
-                summarise(total_start_count = sum(startcount),
-                          total_end_count = sum(endcount),
-                          total_day_diff = sum(day_diff),
-                          total_diff_percentage = sum(day_diff)/sum(startcount),
-                ) %>% left_join(citi_bike_station_info,by='station_id')
-        } 
-        #initial the map to plot on
-        map_2020 <- leaflet_plt_df %>%
-            leaflet(options = leafletOptions(minZoom = 11, maxZoom = 13)) %>%
-            addTiles() %>%
-            addProviderTiles("CartoDB.Positron",
-                             options = providerTileOptions(noWrap = TRUE)) %>%
-            setView(-73.9834,40.7504,zoom = 12) 
-        
-        if (input$adjust_score == 'start_cnt') {
-            map_2020 %>%
-                addHeatmap(
-                           lng=~station_longitude,
-                           lat=~station_latitude,
-                            intensity=~total_start_count, #change to total start count
-                            max=4000,
-                            radius=8,
-                           blur=10)
-        }else if (input$adjust_score == 'end_cnt') {
-            map_2020 %>%
-                addHeatmap(
-                           lng=~station_longitude,
-                           lat=~station_latitude,
-                           intensity=~total_end_count,#change to total end count
-                           max=4000,
-                           radius=8,
-                           blur=10)
-        } else if (input$adjust_score == 'day_diff_absolute'){
-            map_2020 %>%
-                addHeatmap(
-                           lng=~station_longitude,
-                           lat=~station_latitude,
-                           intensity=~total_day_diff,#change to total day diff
-                           max=50,
-                           radius=8,
-                           blur=10)
-            
-        }else if (input$adjust_score == 'day_diff_percentage'){
-            map_2020 %>%
-                addHeatmap(
-                           lng=~station_longitude,
-                           lat=~station_latitude,
-                           intensity=~total_diff_percentage,#change to total day diff percentage
-                           max=0.1,
-                           radius=8,
-                           blur=10)
-            
-        }
-        
-    }) #right map plot
-
-})
-
-
+    barplot(occurrences, main = "Disaster Occurrences by State", 
+            xlab = "State", ylab = "Number of Occurrences", col = "lightblue", border = "black")
+  })
+  
+  #ARIMA
+  disasters_filtered=reactive({
+    filtered_stats = filter(monthly_disasters, state == input$state)
+    filtered_stats = arrange(filtered_stats, incidentBeginMonth)
+    filtered_stats$incidentBeginMonth = as.Date(paste0(filtered_stats$incidentBeginMonth, "-01"))
+    filtered_stats
+  })
+  disaster_ts=reactive({
+    start_year = as.numeric(format(min(disasters_filtered()$incidentBeginMonth), "%Y"))
+    start_month = as.numeric(format(min(disasters_filtered()$incidentBeginMonth), "%m"))
+    tem=ts(disasters_filtered()$NumberOfDisasters, start = c(start_year, start_month), frequency = 12)
+    return(tem)
+  })
+  
+  output$arima_summary = renderPrint({
+    arima(disaster_ts(),c(input$AR,input$I,input$MA))
+  })
+  output$forecast_plot = renderPlot({
+    fit=arima(disaster_ts(),c(input$AR,input$I,input$MA))
+    forecast_values <- forecast(fit, h=10)
+    plot(forecast_values, main="ARIMA Forecast", xlab="Time", ylab="Value")
+  })
+  output$acf_plot = renderPlot({
+    acf(disaster_ts(),main='ACF')
+  })
+  output$pacf_plot = renderPlot({
+    pacf(disaster_ts(),main='PACF')
+  })
+}

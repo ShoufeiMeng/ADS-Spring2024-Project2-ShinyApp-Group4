@@ -2,37 +2,25 @@
 
 ### [Project Description](doc/project2_desc.md)
 
-Term: Fall 2023
+Term: Spring 2024
 
-![screenshot](doc/figs/map.jpg)
+![screenshot](doc/figs/map.png)
 
-In this second project of GR5243 Applied Data Science, we develop a *Exploratory Data Analysis and Visualization* shiny app using one of **the OpenFEMA data sets** of your choice. See [Project 2 Description](doc/project2_desc.md) for more details.  
+## U.S. Disaster Analysis
+Term: Spring 2024
 
-The **learning goals** for this project is:
++ Team 4
++ **U.S. Disaster Analysis**:
+	+ Tianyi Xia
+	+ Yang Yu
+	+ Shoufei Meng
+	+ Xiangjing Hu
 
-- business intelligence for data science
-- data cleaning
-- data visualization
-- systems development/design life cycle
-- shiny app/shiny server
++ **Project summary**: The project focuses on exploratory data analysis and visualization of US disaster information, encompassing the frequency of different disaster types and associated project costs across states. We developed a shiny app that enable users to select a specific year, which then displays the frequency and cost data on the US map. The app also features histograms and ARIMA (AutoRegressive Integrated Moving Average) plots to provide detailed insights into disaster trends and financial impacts. This tool aims to enhance understanding and awareness of disaster patterns and their economic ramifications in the United States.
 
-*The above general statement about project 2 can be removed once you are finished with your project. It is optional.
++ **Shiny App Link**: [https://helena-hu.shinyapps.io/US_Disaster_Shiny/](https://helena-hu.shinyapps.io/US_Disaster_Shiny/)
 
-## Project Title Lorem ipsum dolor sit amet
-Term: Fall 2023
-
-+ Team #
-+ **Projec title**: + Team members
-	+ team member 1
-	+ team member 2
-	+ team member 3
-	+ team member 4
-	+ team member 5
- 	+ team member 6
-
-+ **Project summary**: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-
-+ **Contribution statement**: ([default](doc/a_note_on_contributions.md)) All team members contributed equally in all stages of this project. All team members approve our work presented in this GitHub repository including this contributions statement. 
++ **Contribution statement**: All team members contributed equally in all stages of this project. All team members approve our work presented in this GitHub repository including this contributions statement. We came up with the problem we wanted to study and filtered the appropriate dataset based on the problem. Shoufei Meng and Yang Yu pre-processed the data in the appropriate dataset. Shoufei undertaken the task of data cleansing and integration and engaged in  feature selection to identify the significant attributes of the data. Yang modeled the time series by the frequency of disasters and predicted it by a suitable ARIMA model. Tianyi is responsible for the ARIMA and descriptive statistics analysis sections in the Shiny app. For ARIMA forecasting, ACF and PACF plots are generated, along with time series forecasting and upper and lower confidence intervals. Xiangjing developed the map visualize disaster frequency and project cost of different kinds of disasters for each state in shiny app and deployed the shiny app. Xiangjing combined and organized the code and data and pushed them on GitHub.
 
 Following [suggestions](http://nicercode.github.io/blog/2013-04-05-projects/) by [RICH FITZJOHN](http://nicercode.github.io/about/#Team) (@richfitz). This folder is orgarnized as follows.
 

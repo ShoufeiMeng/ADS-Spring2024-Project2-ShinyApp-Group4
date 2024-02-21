@@ -32,9 +32,9 @@ library(tidyverse)
 
 Load Data
 ```{r read data}
-v1 <- read.csv("E:/GR 5243/FemaWebDisasterDeclarations.csv")
-v2 <- read.csv("E:/GR 5243/DisasterDeclarationsSummaries.csv")
-v3 <- read.csv("E:/GR 5243/PublicAssistanceApplicantsProgramDeliveries.csv")
+v1 <- read.csv("FemaWebDisasterDeclarations.csv")
+v2 <- read.csv("DisasterDeclarationsSummaries.csv")
+v3 <- read.csv("PublicAssistanceApplicantsProgramDeliveries.csv")
 ```
 
 Inspect the Data
@@ -108,16 +108,6 @@ disaster_costs <- combined2 %>%
   summarise(TotalProjectCost = sum(currentProjectCost, na.rm = TRUE), .groups = "drop")
 head(disaster_costs,5)
 ```
-Merge dataset for map
-```{r}
-# combine state location and disaster info for map
-state_location <- read.csv("E:/GR 5243/UsStateLocation.csv")
-
-combined_disaster <- inner_join(disaster_counts, disaster_costs, by = c("state"="stateCode", "Year", "DisasterCategory"))
-data_merged <- merge(combined_disaster, state_location, by = "state")
-
-head(data_merged)
-```
 
 Time Series
 ```{r}
@@ -138,10 +128,9 @@ combined4 <- combined3 %>%
 
 ```{r}
 monthly_disasters <- combined4 %>%
-  group_by(incidentBeginMonth, state) %>%
+  group_by(incidentBeginMonth) %>%
   summarise(NumberOfDisasters = n())
 
-table(monthly_disasters$state)
 
 print(monthly_disasters)
 
@@ -149,6 +138,7 @@ monthly_disasters$incidentBeginMonth <- as.Date(paste0(monthly_disasters$inciden
 start_year <- as.numeric(format(min(monthly_disasters$incidentBeginMonth), "%Y"))
 start_month <- as.numeric(format(min(monthly_disasters$incidentBeginMonth), "%m"))
 
+plot(NumberOfDisasters ~ incidentBeginMonth, data = monthly_disasters, type = "l")
 ```
 
 Calculate the occurrence counts for each state and disaster type
@@ -158,6 +148,25 @@ disaster_counts_ts <- combined4 %>%
   summarise(frequency = n())
 ```
 
+Time Series
+```{r}
+monthly_disasters <- combined4 %>%
+  group_by(incidentBeginMonth, state) %>%
+  summarise(NumberOfDisasters = n())
+
+table(monthly_disasters$state)
+```
+
+Merge dataset for map
+```{r}
+# combine state location and disaster info for map
+state_location <- read.csv("UsStateLocation.csv")
+
+combined_disaster <- inner_join(disaster_counts, disaster_costs, by = c("state"="stateCode", "Year", "DisasterCategory"))
+data_merged <- merge(combined_disaster, state_location, by = "state")
+
+head(data_merged)
+```
 
 ```{r}
 write.csv(data_merged, "Disaster_Map.csv")
