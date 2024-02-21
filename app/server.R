@@ -26,9 +26,9 @@ library(forecast)
 library(leaflet.extras)
 
 # Load data
-data_merged <- read.csv("~/ADS-Spring2024-Project2-ShinyApp-Group4/data/Disaster_Map.csv")
-combined <- read.csv("~/ADS-Spring2024-Project2-ShinyApp-Group4/data/Disaster_Hist.csv")
-monthly_disasters <- read.csv("~/ADS-Spring2024-Project2-ShinyApp-Group4/data/Disaster_Monthly.csv")
+data_merged <- read.csv("data/Disaster_Map.csv")
+combined <- read.csv("data/Disaster_Hist.csv")
+monthly_disasters <- read.csv("data/Disaster_Monthly.csv")
 
 # Define server logic required to draw a histogram
 server <- function(input, output, session) {
