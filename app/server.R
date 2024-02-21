@@ -8,13 +8,14 @@
 #
 ###############################Install Related Packages #######################
 if (!require("dtplyr")) install.packages('dtplyr')
-if (!require("dplyr")) install.packages('dplyr')
+if (!require("dtplyr")) install.packages('dtplyr')
 if (!require("shiny")) install.packages("shiny")
 if (!require("shinydashboard")) install.packages("shinydashboard")
 if (!require("leaflet")) install.packages("leaflet")
 if (!require("scales")) install.packages("scales")
 if (!require("forecast")) install.packages("forecast")
 if (!require("leaflet.extras")) install.packages("leaflet.extras")
+
 library(dtplyr)
 library(dplyr)
 library(shiny)
@@ -39,7 +40,7 @@ server <- function(input, output, session) {
       mutate(radius = case_when(
         input$metric == "frequency" ~ sqrt(frequency) * 1000, # adjust point size
         TRUE ~ sqrt(TotalProjectCost/1e6) * 1000 # adjust point size
-      ))
+        ))
     map_filtered
   })
   
