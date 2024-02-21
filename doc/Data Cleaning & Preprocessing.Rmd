@@ -12,6 +12,7 @@ knitr::opts_chunk$set(fig.width=12, fig.height=8, fig.path='figs/',
 
 Load the data manipulation libraries
 ```{r}
+if (!require("dplyr")) install.packages('dplyr')
 if (!require("DT")) install.packages('DT')
 if (!require("dtplyr")) install.packages('dtplyr')
 if (!require("lubridate")) install.packages('lubridate')
@@ -188,5 +189,6 @@ head(data_merged)
 
 ```{r}
 write.csv(data_merged, "~/ADS-Spring2024-Project2-ShinyApp-Group4/data/Disaster_Map.csv")
+write.csv(monthly_disasters, "~/ADS-Spring2024-Project2-ShinyApp-Group4/data/Disaster_Monthly.csv")
 write.csv(combined, "~/ADS-Spring2024-Project2-ShinyApp-Group4/data/Disaster_Hist.csv")
 ```
