@@ -8,8 +8,8 @@ Term: Spring 2024
 
 ## U.S. Disaster Analysis
 
-+ Team 4
-+ **U.S. Disaster Analysis**:
++ **Team 4**
++ **Team Members**:
 	+ Tianyi Xia
 	+ Yang Yu
 	+ Shoufei Meng
