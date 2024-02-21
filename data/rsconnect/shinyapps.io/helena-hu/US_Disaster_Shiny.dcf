@@ -1,0 +1,10 @@
+name: US_Disaster_Shiny
+title:
+username: helena-hu
+account: helena-hu
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 11284645
+bundleId: 8278856
+url: https://helena-hu.shinyapps.io/US_Disaster_Shiny/
+version: 1
