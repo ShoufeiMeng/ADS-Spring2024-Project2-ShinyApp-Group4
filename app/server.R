@@ -92,9 +92,7 @@ server <- function(input, output, session) {
     filtered_stats
   })
   disaster_ts=reactive({
-    start_year = as.numeric(format(min(disasters_filtered()$incidentBeginMonth), "%Y"))
-    start_month = as.numeric(format(min(disasters_filtered()$incidentBeginMonth), "%m"))
-    tem=ts(disasters_filtered()$NumberOfDisasters, start = c(start_year, start_month), frequency = 12)
+    tem=ts(disasters_filtered()$NumberOfDisasters)
     return(tem)
   })
   
