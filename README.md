@@ -7,7 +7,6 @@ Term: Spring 2024
 ![screenshot](doc/figs/map.png)
 
 ## U.S. Disaster Analysis
-Term: Spring 2024
 
 + Team 4
 + **U.S. Disaster Analysis**:
