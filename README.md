@@ -17,7 +17,7 @@ Term: Spring 2024
 
 + **Project summary**: The project focuses on exploratory data analysis and visualization of US disaster information, encompassing the frequency of different disaster types and associated project costs across states, aiming to examine the short-term and long-term parttern of disaster happend in the US. We developed a shiny app that enable users to select a specific year, which then displays the frequency and cost data on the US map. The app also features histograms and ARIMA (AutoRegressive Integrated Moving Average) plots to provide detailed insights into disaster trends and financial impacts. This tool aims to enhance understanding and awareness of disaster patterns and their economic ramifications in the United States.
 
-+ **Research Question**:
++ **Research Questions**:
 	+ How do disaster frequencies vary among different states in the U.S. on an annual basis, and what patterns can be identified from these variations?
  	+ Which states have consistently experienced the highest number of different disasters per year, and how do these events correlate with losses in those states?
 	+ How has the frequency of different disasters evolved over time across the U.S., and can any short-term or long-term trends be discerned from the data?
