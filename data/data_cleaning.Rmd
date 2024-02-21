@@ -32,9 +32,9 @@ library(tidyverse)
 
 Load Data
 ```{r read data}
-v1 <- read.csv("E:/GR 5243/FemaWebDisasterDeclarations.csv")
-v2 <- read.csv("E:/GR 5243/DisasterDeclarationsSummaries.csv")
-v3 <- read.csv("E:/GR 5243/PublicAssistanceApplicantsProgramDeliveries.csv")
+v1 <- read.csv("FemaWebDisasterDeclarations.csv")
+v2 <- read.csv("DisasterDeclarationsSummaries.csv")
+v3 <- read.csv("PublicAssistanceApplicantsProgramDeliveries.csv")
 ```
 
 Inspect the Data
@@ -111,7 +111,7 @@ head(disaster_costs,5)
 Merge dataset for map
 ```{r}
 # combine state location and disaster info for map
-state_location <- read.csv("E:/GR 5243/UsStateLocation.csv")
+state_location <- read.csv("UsStateLocation.csv")
 
 combined_disaster <- inner_join(disaster_counts, disaster_costs, by = c("state"="stateCode", "Year", "DisasterCategory"))
 data_merged <- merge(combined_disaster, state_location, by = "state")
