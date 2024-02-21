@@ -1,7 +1,7 @@
 ---
 title: "U.S. Disaster Analysis"
 output: html_document
-date: "2024-02-18"
+date: "2024-02-15"
 ---
 
 Set global options
@@ -30,20 +30,6 @@ library(lubridate)
 library(tidyverse)
 ```
 
-```{r}
-if (!require("shiny")) install.packages("shiny")
-if (!require("shinydashboard")) install.packages("shinydashboard")
-if (!require("leaflet")) install.packages("leaflet")
-if (!require("scales")) install.packages("scales")
-if (!require("forecast")) install.packages("forecast")
-
-library(shiny)
-library(shinydashboard)
-library(leaflet)
-library(scales)
-library(forecast)
-```
-
 Load Data
 ```{r read data}
 v1 <- read.csv("FemaWebDisasterDeclarations.csv")
@@ -63,7 +49,6 @@ summary(v1)
 str(v1)
 ```
 
-
 Handle Missing Values
 ```{r}
 na_count <- v1 %>%
@@ -73,17 +58,14 @@ print(na_count)
 
 v1_sel <- v1 %>%
   select(disasterName, stateCode, declarationType, disasterNumber)
-
 v2_sel <- v2 %>% 
   select(state, disasterNumber, incidentType,incidentBeginDate,incidentEndDate, designatedArea)
-
 v3_sel <- v3 %>% 
   select(currentProjectCost, disasterNumber)
 
 combined <- inner_join(v1_sel, v2_sel, by = "disasterNumber")
 combined_df<- inner_join(combined, v3_sel, by = "disasterNumber")
 ```
-
 
 Combine Disaster Type
 ```{r}
@@ -105,7 +87,6 @@ combined2 <- combined1 %>%
   mutate(
     incidentBeginMonth = format(ymd_hms(incidentBeginDate), "%Y-%m")
   )
-
 
 combined2$Year <- sub("-.*", "", combined2$incidentBeginMonth)
 
