@@ -1,0 +1,12 @@
+name: US_Disaster_Analysis
+title: us_disaster_analysis
+username: helena-hu
+account: helena-hu
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 11283880
+bundleId: 8278688
+url: https://helena-hu.shinyapps.io/US_Disaster_Analysis/
+version: 1
+asMultiple: FALSE
+asStatic: FALSE
