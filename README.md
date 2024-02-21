@@ -16,7 +16,7 @@ Term: Spring 2024
 	+ Shoufei Meng
 	+ Xiangjing Hu
 
-+ **Project summary**: The project focuses on exploratory data analysis and visualization of US disaster information, encompassing the frequency of different disaster types and associated project costs across states. We developed a shiny app that enable users to select a specific year, which then displays the frequency and cost data on the US map. The app also features histograms and ARIMA (AutoRegressive Integrated Moving Average) plots to provide detailed insights into disaster trends and financial impacts. This tool aims to enhance understanding and awareness of disaster patterns and their economic ramifications in the United States.
++ **Project summary**: The project focuses on exploratory data analysis and visualization of US disaster information, encompassing the frequency of different disaster types and associated project costs across states, aiming to examine the short-term and long-term parttern of disaster happend in the US. We developed a shiny app that enable users to select a specific year, which then displays the frequency and cost data on the US map. The app also features histograms and ARIMA (AutoRegressive Integrated Moving Average) plots to provide detailed insights into disaster trends and financial impacts. This tool aims to enhance understanding and awareness of disaster patterns and their economic ramifications in the United States.
 
 + **Shiny App Link**: [https://helena-hu.shinyapps.io/US_Disaster_Shiny/](https://helena-hu.shinyapps.io/US_Disaster_Shiny/)
 
