@@ -46,9 +46,9 @@ library(forecast)
 
 Load Data
 ```{r read data}
-v1 <- read.csv("FemaWebDisasterDeclarations.csv")
-v2 <- read.csv("DisasterDeclarationsSummaries.csv")
-v3 <- read.csv("PublicAssistanceApplicantsProgramDeliveries.csv")
+v1 <- read.csv("~/ADS-Spring2024-Project2-ShinyApp-Group4/data/FemaWebDisasterDeclarations.csv")
+v2 <- read.csv("~/ADS-Spring2024-Project2-ShinyApp-Group4/data/DisasterDeclarationsSummaries.csv")
+v3 <- read.csv("~/ADS-Spring2024-Project2-ShinyApp-Group4/data/PublicAssistanceApplicantsProgramDeliveries.csv")
 ```
 
 Inspect the Data
@@ -188,7 +188,7 @@ head(data_merged)
 ```
 
 ```{r}
-write.csv(data_merged, "Disaster_Map.csv")
-write.csv(monthly_disasters, "Disaster_Monthly.csv")
-write.csv(combined, "Disaster_Hist.csv")
+write.csv(data_merged, "~/ADS-Spring2024-Project2-ShinyApp-Group4/data/Disaster_Map.csv")
+write.csv(monthly_disasters, "~/ADS-Spring2024-Project2-ShinyApp-Group4/data/Disaster_Monthly.csv")
+write.csv(combined, "~/ADS-Spring2024-Project2-ShinyApp-Group4/data/Disaster_Hist.csv")
 ```
